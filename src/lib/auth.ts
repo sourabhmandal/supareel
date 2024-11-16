@@ -14,11 +14,11 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
-    sendOnSignUp: true,
+    requireEmailVerification: true,
   },
   emailVerification: {
     sendVerificationEmail: async (user, url, token) => {
-      console.log(user, url, token);
+      console.log("sendVerificationEmail", user, url, token);
       await sendAuthMagicLinkEmail(user.email, url, token);
     },
   },
@@ -31,6 +31,7 @@ export const auth = betterAuth({
   plugins: [
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {
+        console.log("emailOTP plugin sent an email");
         // Implement the sendVerificationOTP method to send the OTP to the user's email address
         console.log(`Sending OTP to ${email}: ${otp} - ${type}`);
       },
