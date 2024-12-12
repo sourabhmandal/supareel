@@ -1,12 +1,13 @@
+"use client";
+import { Button } from "@/components/ui/button";
+import { LOGIN_PAGE } from "@/routes";
+import { useRouter } from "next/navigation";
+
 export default function Home() {
+  const router = useRouter();
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
-      {Array.from({ length: 24 }).map((_, index) => (
-        <div
-          key={index}
-          className="aspect-video h-12 w-full rounded-lg bg-muted/50"
-        />
-      ))}
+    <div className="flex flex-1 flex-col gap-4 p-4 justify-center items-center">
+      <Button onClick={() => router.push(LOGIN_PAGE)}>Login</Button>
     </div>
   );
 }

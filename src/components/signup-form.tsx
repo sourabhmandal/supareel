@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CHECK_MAIL_PAGE } from "@/routes";
+import { CHECK_MAIL_PAGE, DASHBOARD_PAGE } from "@/routes";
 
 export function SignupForm() {
   const [email, setEmail] = useState("");
@@ -47,12 +47,20 @@ export function SignupForm() {
       onSuccess: (ctx) => {
         setLoading(false);
         console.log("onSuccess", ctx);
+        authClient.sendVerificationEmail({
+          email: email,
+          callbackURL: DASHBOARD_PAGE,
+        });
         //redirect to the dashboard
       },
       onError: (ctx) => {
         setLoading(false);
-        console.log("onError", ctx);
-        alert(`${error?.status} ${error?.message}`);
+        console.log("onError", ctx.error);
+        // Handle the error
+        if (ctx.error.status === 403) {
+          alert("Please verify your email address");
+        }
+        alert(`${ctx.error?.status} ${ctx.error?.message}`);
       },
     });
 
@@ -108,12 +116,6 @@ export function SignupForm() {
           </div>
           <Button className="w-full" onClick={signUp}>
             {loading ? <EnvelopeOpenIcon /> : <RocketIcon />} Sign Up
-          </Button>
-          <Button
-            variant="outline"
-            className="w-full text-red-500 border-red-400"
-          >
-            Login with Google
           </Button>
         </div>
         <div className="mt-4 text-center text-sm">
